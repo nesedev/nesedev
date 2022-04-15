@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nese.dev</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            background: #171717;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            font-family: "Roboto Mono";
+
+            line-height: 1;
+        }
+
+        .nesedev {
+            font-size: 10vmin;
+            user-select: none;
+            cursor: default;
+            
+            background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
+            background-size: 200%;
+            animation: gradient 20s ease-in-out infinite;
+            
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .terminal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: white;
+            word-break: break-all;
+            font-size: 5vmin;
+
+            background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
+            background-size: 200%;
+            animation: gradient 20s ease-in-out infinite;
+            
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            pointer-events: none;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 100% 50%;
+            }
+
+            50% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .letter {
+            transition: opacity .1s ease-out;
+        }
+
+        .letter.hidden {
+            opacity: .0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="terminal">&gt;<span id="tts-content"></span></div>
+
+    <div class="nesedev">
+        &nbsp;&nbsp;&nbsp;<span class="letter">n</span><br />
+        &nbsp;&nbsp;<span class="letter">n</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span
+            class="letter">d</span><br />
+        &nbsp;<span class="letter">n</span><span class="letter">e</span><span class="letter">s</span>&nbsp;&nbsp;<span
+            class="letter">d</span><span class="letter">e</span><br />
+        <span class="letter">n</span><span class="letter">e</span><span class="letter">s</span><span
+            class="letter">e</span><span id="dot">.</span><span class="letter">d</span><span class="letter">e</span><span
+            class="letter">v</span><br />
+        <span class="letter">e</span><span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;<span
+            class="letter">e</span><span class="letter">v</span><br />
+        <span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span class="letter">v</span><br />
+        <span class="letter">e</span><br />
+    </div>
+
+    <script>
+        const letters = document.getElementsByClassName('letter');
+        const ttsContent = document.getElementById('tts-content');
+        const dot = document.getElementById('dot');
+
+        const ttsMessage = new SpeechSynthesisUtterance();
+        const voices = speechSynthesis.getVoices();
+
+        let counter = 0;
+
+        dot.addEventListener('click', function() {
+            showAllLetters();
+            if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+                window.speechSynthesis.speak(ttsMessage);
+            }
+        });
+
+        dot.addEventListener('dblclick', function() {
+            showAllLetters();
+            ttsContent.textContent = '';
+            window.speechSynthesis.cancel();
+        })
+
+        function showAllLetters() {
+            for (const letter of letters) {
+                letter.classList.remove('hidden')
+            }
+        }
+
+        for (const letter of letters) {
+            letter.addEventListener('click', letterClicked);
+        }
+        
+        function letterClicked(e) {
+            const letterElem = e.target;
+            if (letterElem.classList.contains('hidden')) {
+                return;
+            }
+
+            letterElem.classList.add('hidden')
+            const letter = letterElem.textContent;
+
+            ttsContent.textContent += letter
+
+            ttsMessage.text = ttsContent.textContent;
+            ttsMessage.voice = voices[counter++ % voices.length]
+            
+            if (!window.speechSynthesis.pending) {
+                window.speechSynthesis.speak(ttsMessage);
+            }
+
+            if (document.querySelectorAll('.letter:not(.hidden)').length == 0) {
+                showAllLetters();
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
