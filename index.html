@@ -1,165 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>nese.dev</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nese.dev</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
-
-        body,
-        html {
-            height: 100%;
-            width: 100%;
-            background: #171717;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            font-family: "Roboto Mono";
-
-            line-height: 1;
-        }
-
-        .nesedev {
-            font-size: 10vmin;
-            user-select: none;
-            cursor: default;
-            
-            background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
-            background-size: 200%;
-            animation: gradient 20s ease-in-out infinite;
-            
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .terminal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            color: white;
-            word-break: break-all;
-            font-size: 5vmin;
-
-            background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
-            background-size: 200%;
-            animation: gradient 20s ease-in-out infinite;
-            
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            pointer-events: none;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 100% 50%;
+            body,
+            html {
+                height: 100%;
+                width: 100%;
+                background: #171717;
+                margin: 0;
+                padding: 0;
             }
 
-            50% {
-                background-position: 0% 50%;
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                font-family: "Roboto Mono";
+
+                line-height: 1;
             }
 
-            100% {
-                background-position: 100% 50%;
-            }
-        }
+            .terminal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                color: white;
+                word-break: break-all;
+                font-size: 5vmin;
 
-        .letter {
-            transition: opacity .1s ease-out;
-        }
+                background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
+                background-size: 200%;
+                animation: gradient 20s ease-in-out infinite;
+                
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
 
-        .letter.hidden {
-            opacity: .0;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="terminal">&gt;<span id="tts-content"></span></div>
-
-    <div class="nesedev">
-        &nbsp;&nbsp;&nbsp;<span class="letter">n</span><br />
-        &nbsp;&nbsp;<span class="letter">n</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span
-            class="letter">d</span><br />
-        &nbsp;<span class="letter">n</span><span class="letter">e</span><span class="letter">s</span>&nbsp;&nbsp;<span
-            class="letter">d</span><span class="letter">e</span><br />
-        <span class="letter">n</span><span class="letter">e</span><span class="letter">s</span><span
-            class="letter">e</span><span id="dot">.</span><span class="letter">d</span><span class="letter">e</span><span
-            class="letter">v</span><br />
-        <span class="letter">e</span><span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;<span
-            class="letter">e</span><span class="letter">v</span><br />
-        <span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span class="letter">v</span><br />
-        <span class="letter">e</span><br />
-    </div>
-
-    <script>
-        const letters = document.getElementsByClassName('letter');
-        const ttsContent = document.getElementById('tts-content');
-        const dot = document.getElementById('dot');
-
-        const ttsMessage = new SpeechSynthesisUtterance();
-        const voices = speechSynthesis.getVoices();
-
-        let counter = 0;
-
-        dot.addEventListener('click', function() {
-            showAllLetters();
-            if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
-                window.speechSynthesis.speak(ttsMessage);
-            }
-        });
-
-        dot.addEventListener('dblclick', function() {
-            showAllLetters();
-            ttsContent.textContent = '';
-            window.speechSynthesis.cancel();
-        })
-
-        function showAllLetters() {
-            for (const letter of letters) {
-                letter.classList.remove('hidden')
-            }
-        }
-
-        for (const letter of letters) {
-            letter.addEventListener('click', letterClicked);
-        }
-        
-        function letterClicked(e) {
-            const letterElem = e.target;
-            if (letterElem.classList.contains('hidden')) {
-                return;
+                pointer-events: none;
             }
 
-            letterElem.classList.add('hidden')
-            const letter = letterElem.textContent;
-
-            ttsContent.textContent += letter
-
-            ttsMessage.text = ttsContent.textContent;
-            ttsMessage.voice = voices[counter++ % voices.length]
-            
-            if (!window.speechSynthesis.pending) {
-                window.speechSynthesis.speak(ttsMessage);
+            .nesedev {
+                font-size: 10vmin;
+                user-select: none;
+                cursor: default;
+                
+                background: linear-gradient(45deg, #ffbf7f 0%, #ff7fff 50%, #3f7fff 100%);
+                background-size: 200%;
+                animation: gradient 20s ease-in-out infinite;
+                
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
 
-            if (document.querySelectorAll('.letter:not(.hidden)').length == 0) {
+            @keyframes gradient {
+                0% {
+                    background-position: 100% 50%;
+                }
+
+                50% {
+                    background-position: 0% 50%;
+                }
+
+                100% {
+                    background-position: 100% 50%;
+                }
+            }
+
+            .letter {
+                transition: opacity .1s ease-out;
+            }
+
+            .letter.hidden {
+                opacity: .0;
+            }
+
+            #speedrun {
+                display: none;
+                background: black;
+                color: white;
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                grid-template-columns: 1fr auto;
+                grid-gap: .5em;
+                padding: .5em;
+                text-align: right;
+                font-size: 2.5vmin;
+            }
+
+            #highscore-counter, #current-score-counter {
+                min-width: 5em;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="terminal">&gt;<span id="tts-content"></span></div>
+
+        <div class="nesedev">
+            &nbsp;&nbsp;&nbsp;<span class="letter">n</span><br />
+            &nbsp;&nbsp;<span class="letter">n</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span
+                class="letter">d</span><br />
+            &nbsp;<span class="letter">n</span><span class="letter">e</span><span class="letter">s</span>&nbsp;&nbsp;<span
+                class="letter">d</span><span class="letter">e</span><br />
+            <span class="letter">n</span><span class="letter">e</span><span class="letter">s</span><span
+                class="letter">e</span><span id="dot">.</span><span class="letter">d</span><span class="letter">e</span><span
+                class="letter">v</span><br />
+            <span class="letter">e</span><span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;<span
+                class="letter">e</span><span class="letter">v</span><br />
+            <span class="letter">s</span><span class="letter">e</span>&nbsp;&nbsp;&nbsp;<span class="letter">v</span><br />
+            <span class="letter">e</span><br />
+        </div>
+
+        <div id="speedrun">
+            <span>Highscore:</span><span id="highscore-counter">-</span>
+            <span>Current:</span><span id="current-score-counter">-</span>
+        </div>
+
+        <script>
+            const letters = document.getElementsByClassName('letter');
+            const ttsContent = document.getElementById('tts-content');
+            const dot = document.getElementById('dot');
+
+            const speedrunWrapper = document.getElementById('speedrun');
+            const highscoreCounter = document.getElementById('highscore-counter');
+            const currentScoreCounter = document.getElementById('current-score-counter');
+
+            const ttsMessage = new SpeechSynthesisUtterance();
+            const voices = speechSynthesis.getVoices();
+
+            let counter = 0;
+
+            function readMessage(force) {
+                ttsMessage.text = ttsContent.textContent;
+                ttsMessage.voice = voices[counter++ % voices.length]
+                
+                if (force) {
+                    window.speechSynthesis.cancel();
+                }
+
+                if (force || !window.speechSynthesis.pending) {
+                    window.speechSynthesis.speak(ttsMessage);
+                }
+            }
+
+            dot.addEventListener('click', function() {
                 showAllLetters();
-            }
-        }
-        
-    </script>
-</body>
+                readMessage(true);
+                resetScore();
+            });
 
+            dot.addEventListener('dblclick', function() {
+                showAllLetters();
+                ttsContent.textContent = '';
+                window.speechSynthesis.cancel();
+            })
+
+            function showAllLetters() {
+                for (const letter of letters) {
+                    letter.classList.remove('hidden');
+                }
+            }
+
+            for (const letter of letters) {
+                letter.addEventListener('click', letterClicked);
+            }
+            
+            function letterClicked(e) {
+                const letterElem = e.target;
+                if (letterElem.classList.contains('hidden')) {
+                    return;
+                }
+
+                if (currentScore == 0) {
+                    recordScore();
+                }
+
+                letterElem.classList.add('hidden')
+                const letter = letterElem.textContent;
+
+                ttsContent.textContent += letter;
+
+                readMessage();
+
+                if (document.querySelectorAll('.letter:not(.hidden)').length == 0) {
+                    showAllLetters();
+                    setScore();
+                }
+            }
+
+            let highscore = 0;
+            let currentScore = 0;
+
+            let scoreInterval
+            function recordScore() {
+                let startTime = Date.now();
+                scoreInterval = setInterval(function() {
+                    currentScore = Date.now() - startTime;
+                    currentScoreCounter.textContent = (currentScore / 1000).toFixed(3) + 's'
+                }, 0)
+            }
+
+            function resetScore() {
+                currentScore = 0
+                currentScoreCounter.textContent = '-'
+                clearInterval(scoreInterval);
+            }
+
+            function setScore() {
+                if (highscore == 0) {
+                    speedrunWrapper.style.display = 'grid';
+                }
+
+                if (highscore == 0 || currentScore < highscore) {
+                    highscore = currentScore;
+                    highscoreCounter.textContent = (currentScore / 1000).toFixed(3) + 's'
+                }
+                resetScore()
+            }
+        </script>
+    </body>
 </html>
