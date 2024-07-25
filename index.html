@@ -135,13 +135,22 @@
             const currentScoreCounter = document.getElementById('current-score-counter');
 
             const ttsMessage = new SpeechSynthesisUtterance();
-            const voices = speechSynthesis.getVoices();
+            let voices = speechSynthesis.getVoices();
 
-            let counter = 0;
-
+            speechSynthesis.onvoiceschanged = function() {
+                voices = speechSynthesis.getVoices();
+            }
+            
+            let lastVoiceIndex = -1;
             function readMessage(force) {
+                let voiceIndex = Math.floor(Math.random() * voices.length);
+                if (voiceIndex == lastVoiceIndex) {
+                    voiceIndex = (voiceIndex + 1) % voices.length;
+                }
+                lastVoiceIndex = voiceIndex;
+
                 ttsMessage.text = ttsContent.textContent;
-                ttsMessage.voice = voices[counter++ % voices.length]
+                ttsMessage.voice = voices[voiceIndex];
                 
                 if (force) {
                     window.speechSynthesis.cancel();
